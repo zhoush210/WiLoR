@@ -18,3 +18,9 @@ python scripts/test_xperience_10m.py \
 python scripts/test_egoverse.py \
   --dataset_path /mnt/raid0/egocentric_datasets/egoVerse/69b57e518cd7957ebe4794cd
 ```
+
+# hot3d
+```bash
+python scripts/test_hot3d.py \
+  --dataset_path /mnt/raid0/HOT3D-Clips/train_aria_full/clip-001849
+```
