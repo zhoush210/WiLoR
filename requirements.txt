@@ -18,3 +18,5 @@ rich
 webdataset
 gradio
 ultralytics==8.1.34
+h5py
+zstandard

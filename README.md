@@ -40,13 +40,42 @@ cd WiLoR
 
 The code has been tested with PyTorch 2.0.0 and CUDA 11.7. It is suggested to use an anaconda environment to install the the required dependencies:
 ```bash
+export CUDA_HOME=/usr/local/cuda-11.7
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+export CC=/usr/bin/gcc-11
+export CXX=/usr/bin/g++-11
+
 conda create --name wilor python=3.10
 conda activate wilor
 
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu117
-# Install requirements
-pip install -r requirements.txt
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install "numpy<2"
+
+python -m pip install \
+  torch==2.0.1+cu117 \
+  torchvision==0.15.2+cu117 \
+  --index-url https://download.pytorch.org/whl/cu117
 ```
+然后创建一个临时约束文件，防止后续依赖把 torch 升级：
+```bash
+cat > /tmp/wilor-constraints.txt <<'EOF'
+torch==2.0.1+cu117
+torchvision==0.15.2+cu117
+pytorch-lightning<2.1
+numpy<2
+EOF
+```
+再装 WiLoR 依赖：
+```bash
+python -m pip install \
+  --no-cache-dir \
+  --no-build-isolation \
+  -r requirements.txt \
+  -c /tmp/wilor-constraints.txt \
+  --extra-index-url https://download.pytorch.org/whl/cu117
+```
+
 Download the pretrained models using: 
 ```bash
 wget https://huggingface.co/spaces/rolpotamias/WiLoR/resolve/main/pretrained_models/detector.pt -P ./pretrained_models/
